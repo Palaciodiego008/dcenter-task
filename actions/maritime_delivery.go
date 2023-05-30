@@ -5,10 +5,13 @@ import (
 	"docucenter-task/internal"
 	"docucenter-task/models"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 
 	"github.com/go-playground/validator"
+	"github.com/gorilla/mux"
+	"gorm.io/gorm"
 )
 
 // Handler para crear un plan de entrega de logística terrestre
@@ -89,4 +92,80 @@ func CreateTruckDelivery(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Println("Plan de entrega de logística terrestre creado exitosamente")
+}
+
+// UpdateTruckDelivery updates a truck delivery by its ID
+// UpdateTruckDelivery updates a truck delivery by its ID
+func UpdateTruckDelivery(w http.ResponseWriter, r *http.Request) {
+	// Get the truck delivery ID from the request URL
+	deliveryID := mux.Vars(r)["id"]
+	if deliveryID == "" {
+		http.Error(w, "Truck delivery ID not provided", http.StatusBadRequest)
+		return
+	}
+
+	var updatedDelivery models.TruckDelivery
+	err := json.NewDecoder(r.Body).Decode(&updatedDelivery)
+	if err != nil {
+		http.Error(w, "Error parsing updated truck delivery data", http.StatusBadRequest)
+		return
+	}
+
+	db, err := db.GetDBConnection()
+	if err != nil {
+		http.Error(w, "Error connecting to the database", http.StatusInternalServerError)
+		return
+	}
+
+	// Find the truck delivery by ID
+	var delivery models.TruckDelivery
+	result := db.First(&delivery, "id = ?", deliveryID)
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			http.Error(w, "Truck delivery not found", http.StatusNotFound)
+		} else {
+			http.Error(w, "Error retrieving truck delivery data", http.StatusInternalServerError)
+		}
+		return
+	}
+
+	// Update the truck delivery with the new data
+	result = db.Model(&delivery).Updates(&updatedDelivery)
+	if result.Error != nil {
+		http.Error(w, "Error updating truck delivery", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(delivery)
+}
+
+// DeleteTruckDelivery deletes a truck delivery by its ID
+func DeleteTruckDelivery(w http.ResponseWriter, r *http.Request) {
+	// Get the truck delivery ID from the request URL
+	deliveryID := mux.Vars(r)["id"]
+	if deliveryID == "" {
+		http.Error(w, "Truck delivery ID not provided", http.StatusBadRequest)
+		return
+	}
+
+	db, err := db.GetDBConnection()
+	if err != nil {
+		http.Error(w, "Error connecting to the database", http.StatusInternalServerError)
+		return
+	}
+
+	// Delete the truck delivery by ID
+	result := db.Delete(&models.TruckDelivery{}, deliveryID)
+	if result.Error != nil {
+		http.Error(w, "Error deleting truck delivery", http.StatusInternalServerError)
+		return
+	}
+	if result.RowsAffected == 0 {
+		http.Error(w, "Truck delivery not found", http.StatusNotFound)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
 }
