@@ -21,3 +21,8 @@ type ShipDelivery struct {
 	FleetNumber      string    `json:"fleet_number" validate:"required,len=10"`
 	GuideNumber      string    `json:"guide_number" validate:"required,len=10"`
 }
+
+// TableName specifies the table name for the ShipDelivery model
+func (ShipDelivery) TableName() string {
+	return "ship_deliveries"
+}

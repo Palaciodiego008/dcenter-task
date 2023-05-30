@@ -21,3 +21,8 @@ type TruckDelivery struct {
 	VehiclePlate string `json:"vehicle_plate" validate:"required,regexp=^[A-Z]{3}[0-9]{3}$"`
 	GuideNumber  string `json:"guide_number" validate:"required,len=10"`
 }
+
+// TableName specifies the table name for the TruckDelivery model
+func (TruckDelivery) TableName() string {
+	return "truck_deliveries"
+}
