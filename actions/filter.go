@@ -9,8 +9,6 @@ import (
 )
 
 // Handler para consultar los planes de entrega con filtros
-
-// Handler para consultar los planes de entrega con filtros
 func GetDeliveries(w http.ResponseWriter, r *http.Request) {
 	// Obtener los parámetros de consulta
 	queryParams := r.URL.Query()
