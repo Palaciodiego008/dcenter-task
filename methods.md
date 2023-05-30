@@ -54,3 +54,17 @@
      - Código 201 (Created) si el plan de entrega se crea correctamente.
      - Código 400 (Bad Request) si hay un error en la validación de los datos o en el formato de la placa del vehículo o el número de guía.
      - Código 500 (Internal Server Error) si hay un
+
+
+
+     **CalcularDescuento:**
+   - Descripción: Calcula el descuento para el precio de envío de un plan de entrega de logística terrestre en función de la cantidad de productos.
+   - Parámetros de entrada:
+     - truckDelivery: Objeto que representa el plan de entrega de logística terrestre.
+   - Parámetros de salida:
+     - N/A (el descuento se calcula directamente en el objeto truckDelivery).
+   - Funcionalidad:
+     - Verifica si la cantidad de productos en el plan de entrega es mayor a 10.
+     - Si la condición es verdadera, calcula el descuento como el 5% del precio de envío.
+     - Si la condición es falsa, el precio de envío se mantiene sin cambios.
+     - Actualiza el valor del precio con descuento en la propiedad truckDelivery.DiscountedPrice del objeto truckDelivery.
