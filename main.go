@@ -23,6 +23,7 @@ func main() {
 	router.HandleFunc("/api/logistics/ship", actions.CreateShipDelivery).Methods("POST")
 	router.HandleFunc("/api/logistics/deliveries", actions.GetDeliveries).Methods("GET")
 	router.HandleFunc("/api/logistics/client/", actions.CreateClient).Methods("POST")
+	router.HandleFunc("/api/logistics/client/{id}", actions.UpdateClient).Methods("PUT")
 
 	// Iniciar el servidor HTTP
 	fmt.Println("Server is running on port 8000")
