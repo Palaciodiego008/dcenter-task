@@ -11,7 +11,7 @@ func GetDBConnection() (*gorm.DB, error) {
 	const (
 		host   = "localhost"
 		port   = 5432
-		user   = "wawandco"
+		user   = "user"
 		dbname = "company_logistics"
 	)
 
