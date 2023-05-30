@@ -1,57 +1,53 @@
 package actions
 
 import (
+	"docucenter-task/db"
+	"docucenter-task/models"
+	"encoding/json"
+	"log"
 	"net/http"
 )
 
 // Handler para consultar los planes de entrega con filtros
+
+// Handler para consultar los planes de entrega con filtros
 func GetDeliveries(w http.ResponseWriter, r *http.Request) {
-	// // Obtener los parámetros de consulta
-	// queryParams := r.URL.Query()
+	// Obtener los parámetros de consulta
+	queryParams := r.URL.Query()
 
-	// // Construir la consulta SQL base
-	// sqlQuery := "SELECT * FROM logistics_truck WHERE 1 = 1"
+	// Crear una instancia de DB con la conexión establecida
+	db, err := db.GetDBConnection()
 
-	// // Agregar filtros según los parámetros de consulta
-	// if clientID := queryParams.Get("client_id"); clientID != "" {
-	// 	sqlQuery += fmt.Sprintf(" AND client_id = %s", clientID)
-	// }
-	// if productType := queryParams.Get("product_type"); productType != "" {
-	// 	sqlQuery += fmt.Sprintf(" AND product_type = '%s'", productType)
-	// }
-	// // Agrega más filtros según sea necesario
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	// // Ejecutar la consulta en la base de datos
-	// db := db.GetDBConnection()
-	// defer db.Close()
+	// Construir la consulta base
+	query := db.Model(&models.TruckDelivery{})
 
-	// rows, err := db.Query(sqlQuery)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// defer rows.Close()
+	// Agregar filtros según los parámetros de consulta
+	if clientID := queryParams.Get("client_id"); clientID != "" {
+		query = query.Where("client_id = ?", clientID)
+	}
+	if productType := queryParams.Get("product_type"); productType != "" {
+		query = query.Where("product_type = ?", productType)
+	}
+	// Agrega más filtros según sea necesario
 
-	// // Iterar sobre los resultados y enviar la respuesta
-	// deliveries := []models.TruckDelivery{}
-	// for rows.Next() {
-	// 	var delivery models.TruckDelivery
-	// 	err := rows.Scan(
-	// 		&delivery.ClientID, &delivery.ProductType, &delivery.Quantity, &delivery.RegistrationDate,
-	// 		&delivery.DeliveryDate, &delivery.Warehouse, &delivery.ShippingPrice, &delivery.DiscountedPrice,
-	// 		&delivery.VehiclePlate, &delivery.GuideNumber)
-	// 	if err != nil {
-	// 		log.Fatal(err)
-	// 	}
-	// 	deliveries = append(deliveries, delivery)
-	// }
+	// Ejecutar la consulta
+	var deliveries []models.TruckDelivery
+	err = query.Find(&deliveries).Error
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	// // Convertir los resultados a JSON y enviar la respuesta
-	// response, err := json.Marshal(deliveries)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
+	// Convertir los resultados a JSON y enviar la respuesta
+	response, err := json.Marshal(deliveries)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	// w.Header().Set("Content-Type", "application/json")
-	// w.WriteHeader(http.StatusOK)
-	// w.Write(response)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(response)
 }
