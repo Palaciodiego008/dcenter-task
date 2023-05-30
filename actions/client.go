@@ -12,8 +12,6 @@ import (
 	"gorm.io/gorm"
 )
 
-// ...
-
 func CreateClient(w http.ResponseWriter, r *http.Request) {
 	var client models.Client
 	err := json.NewDecoder(r.Body).Decode(&client)
@@ -74,15 +72,6 @@ func UpdateClient(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Check if the "clients" table exists, and if not, create it
-	if !db.Migrator().HasTable(&models.Client{}) {
-		err := db.Migrator().CreateTable(&models.Client{})
-		if err != nil {
-			http.Error(w, "Error creating 'clients' table", http.StatusInternalServerError)
-			return
-		}
-	}
-
 	// Check if the client exists
 	var existingClient models.Client
 	result := db.First(&existingClient, "id = ?", clientID)
@@ -110,4 +99,61 @@ func UpdateClient(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(existingClient)
+}
+
+// GetClientByID retrieves a client by its ID
+func GetClientByID(w http.ResponseWriter, r *http.Request) {
+	// Get the client ID from the request URL
+	clientID := mux.Vars(r)["id"]
+	if clientID == "" {
+		http.Error(w, "Client ID not provided", http.StatusBadRequest)
+		return
+	}
+
+	db, err := db.GetDBConnection()
+	if err != nil {
+		http.Error(w, "Error connecting to the database", http.StatusInternalServerError)
+		return
+	}
+
+	// Find the client by ID
+	var client models.Client
+	result := db.First(&client, "id = ?", clientID)
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			http.Error(w, "Client not found", http.StatusNotFound)
+		} else {
+			http.Error(w, "Error retrieving client data", http.StatusInternalServerError)
+		}
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(client)
+}
+
+// DeleteClient deletes a client by its ID
+func DeleteClient(w http.ResponseWriter, r *http.Request) {
+	// Get the client ID from the request URL
+	clientID := mux.Vars(r)["id"]
+	if clientID == "" {
+		http.Error(w, "Client ID not provided", http.StatusBadRequest)
+		return
+	}
+
+	db, err := db.GetDBConnection()
+	if err != nil {
+		http.Error(w, "Error connecting to the database", http.StatusInternalServerError)
+		return
+	}
+
+	// Delete the client by ID
+	result := db.Delete(&models.Client{}, "id = ?", clientID)
+	if result.Error != nil {
+		http.Error(w, "Error deleting client", http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
 }
