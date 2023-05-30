@@ -1,3 +1,30 @@
+En la solución propuesta se utilizan las siguientes tecnologías:
+
+1. Golang (Go): Es un lenguaje de programación de alto rendimiento y eficiencia diseñado para construir aplicaciones escalables. Se utiliza como lenguaje principal para el desarrollo del backend.
+
+2. GORM: Es una biblioteca de mapeo objeto-relacional (ORM) para Golang. Proporciona una interfaz sencilla y productiva para interactuar con la base de datos, abstrayendo las operaciones y consultas SQL. GORM facilita el manejo de la capa de persistencia y simplifica la interacción con la base de datos.
+
+3. PostgreSQL: Es un sistema de gestión de bases de datos relacional de código abierto. Se utiliza como motor de base de datos para almacenar y administrar los datos de la aplicación.
+
+4. JSON: Es un formato de intercambio de datos ligero y ampliamente utilizado. Se utiliza para representar los datos en formato JSON en las solicitudes y respuestas HTTP, lo que facilita la comunicación entre el frontend y el backend de la aplicación.
+
+5. HTTP: Es el protocolo utilizado para la comunicación entre el cliente (navegador) y el servidor. Las solicitudes y respuestas HTTP se utilizan para enviar y recibir datos entre el frontend y el backend de la aplicación.
+
+6. Validaciones: Se utilizan validaciones para garantizar la integridad de los datos ingresados en la aplicación. Se emplea una biblioteca de validación (por ejemplo, validator) para verificar y validar los campos según las reglas definidas (como requerido, rango de valores, formato, etc.).
+
+7. Controladores HTTP: Los controladores HTTP son funciones o métodos que se encargan de manejar las solicitudes HTTP entrantes. Se utilizan para procesar las solicitudes, realizar validaciones, interactuar con la base de datos y enviar respuestas adecuadas al cliente.
+
+8. Gorilla Mux: Gorilla Mux es un enrutador y despachador de solicitudes HTTP para el lenguaje de programación Go. Proporciona una forma elegante y flexible de definir rutas, manejar parámetros en las URL y administrar la lógica de enrutamiento en una aplicación web. Gorilla Mux se utiliza para definir las rutas y manejar las solicitudes HTTP entrantes en el backend de la aplicación.
+
+Gorilla Mux es una biblioteca popular y ampliamente utilizada en el ecosistema Go para el enrutamiento web debido a su flexibilidad, rendimiento y características adicionales que ofrece, como el manejo de middleware, patrones de URL variables, enrutamiento de subdominios, etc.
+
+En la solución propuesta, Gorilla Mux se integraría con Golang y se utilizaría para definir las rutas de API y vincular los controladores HTTP correspondientes a esas rutas. Proporciona una forma intuitiva y poderosa de manejar las solicitudes entrantes y dirigirlas a la lógica de negocio adecuada en función de las rutas definidas.
+
+Estas tecnologías se combinan para desarrollar una solución robusta y eficiente que cumpla con los requisitos de la aplicación de gestión logística terrestre y marítima.
+
+
+
+## 
 1. **CreateClient:**
    - Descripción: Crea un nuevo cliente y lo guarda en la base de datos.
    - Método HTTP: POST
