@@ -68,3 +68,19 @@
      - Si la condición es verdadera, calcula el descuento como el 5% del precio de envío.
      - Si la condición es falsa, el precio de envío se mantiene sin cambios.
      - Actualiza el valor del precio con descuento en la propiedad truckDelivery.DiscountedPrice del objeto truckDelivery.
+
+  **Relación entre Clients y Deliveries:**
+
+  En el contexto del sistema de gestión logística, existe una relación entre los clientes (Clients) y los planes de entrega (Deliveries). Esta relación se establece para asociar cada plan de entrega con el cliente correspondiente.
+
+  Descripción de la relación:
+  - Un cliente puede tener varios planes de entrega.
+  - Cada plan de entrega está vinculado a un único cliente.
+
+  Esta relación se representa a través de una relación de uno a muchos, donde un cliente puede tener múltiples planes de entrega, pero cada plan de entrega pertenece a un solo cliente.
+
+  La relación entre Clients y Deliveries se establece mediante una clave foránea (foreign key) en la tabla de Deliveries, que hace referencia a la clave primaria del cliente en la tabla de Clients. Esta clave foránea permite vincular cada plan de entrega con el cliente al que pertenece.
+
+  En el modelo de base de datos, la tabla de Clients contendría la información del cliente, como su ID, nombre, dirección, etc. Mientras que la tabla de Deliveries almacenaría los detalles de los planes de entrega, como el tipo de producto, cantidad, fechas, precios, etc., y también incluiría la clave foránea que referencia al ID del cliente al que pertenece el plan de entrega.
+
+  En resumen, la relación entre Clients y Deliveries permite establecer la conexión entre los clientes y sus respectivos planes de entrega, lo que facilita la gestión y seguimiento de los envíos y servicios logísticos asociados a cada cliente.
