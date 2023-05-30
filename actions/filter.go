@@ -30,7 +30,9 @@ func GetDeliveries(w http.ResponseWriter, r *http.Request) {
 	if productType := queryParams.Get("product_type"); productType != "" {
 		query = query.Where("product_type = ?", productType)
 	}
-	// Agrega más filtros según sea necesario
+	if quantity := queryParams.Get("quantity"); quantity != "" {
+		query = query.Where("quantity = ?", quantity)
+	}
 
 	// Ejecutar la consulta
 	var deliveries []models.TruckDelivery
